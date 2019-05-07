@@ -15,6 +15,7 @@ import {
   loadInconsistentObjects,
 } from './Metadata/Actions';
 import globals from '../../../Globals';
+import { adornSchemas } from '../../../utils/adornSchemas.js';
 
 import { SERVER_CONSOLE_MODE } from '../../../constants';
 
@@ -254,6 +255,7 @@ const fetchDataInit = () => (dispatch, getState) => {
     data => {
       dispatch({ type: FETCH_SCHEMA_LIST, schemaList: data[0] });
       let schemas = data[1];
+
       const { inconsistentObjects } = getState().metadata;
       if (inconsistentObjects.length > 0) {
         schemas = filterInconsistentMetadata(
@@ -262,6 +264,8 @@ const fetchDataInit = () => (dispatch, getState) => {
           'tables'
         );
       }
+      adornSchemas(schemas);
+
       dispatch({ type: LOAD_SCHEMA, allSchemas: schemas });
       dispatch({ type: LOAD_UNTRACKED_SCHEMA, untrackedSchemas: data[2] });
     },
@@ -356,6 +360,7 @@ const loadSchema = () => (dispatch, getState) => {
           'tables'
         );
       }
+      adornSchemas(schemas);
       dispatch({ type: LOAD_SCHEMA, allSchemas: schemas });
       dispatch(loadInconsistentObjects(null, false));
     },

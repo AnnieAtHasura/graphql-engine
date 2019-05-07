@@ -5,7 +5,8 @@ import { setTable } from '../DataActions';
 import TableHeader from '../TableCommon/TableHeader';
 import ViewHeader from './ViewHeader';
 import ViewRows from './ViewRows';
-import { replace } from 'react-router-redux';
+// import { replace } from 'react-router-redux';
+import { adornSchemas } from '../../../../utils/adornSchemas.js';
 
 const genHeadings = headings => {
   if (headings.length === 0) {
@@ -134,12 +135,14 @@ class ViewTable extends Component {
       currentSchema,
     } = this.props; // eslint-disable-line no-unused-vars
 
+    adornSchemas(schemas);
     // check if table exists
-    const currentTable = schemas.find(s => s.table_name === tableName);
-    if (!currentTable) {
-      // dispatch a 404 route
-      dispatch(replace('/404'));
-    }
+    // const currentTable = schemas.getTable(tableName);
+    // Rikin why? if (!currentTable) {
+    // dispatch a 404 route
+    //  dispatch(replace('/404'));
+    //    }
+
     // Is this a view
     const isView =
       schemas.find(s => s.table_name === tableName).detail.table_type !==
